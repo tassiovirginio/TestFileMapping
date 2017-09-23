@@ -18,7 +18,15 @@ public class MappingDetector {
     public TestFile detectMapping(String testFilePath) throws IOException {
 
         testFile = new TestFile(testFilePath);
-        productionFileName = testFile.getFileName().substring(0, testFile.getFileName().toLowerCase().lastIndexOf("test")) + ".java";
+
+        int index = testFile.getFileName().toLowerCase().lastIndexOf("test");
+        if(index == 0){
+            //the name of the test file starts with the name 'test'
+            productionFileName = testFile.getFileName().substring(4, testFile.getFileName().length());
+        }else{
+            //the name of the test file ends with the name 'test'
+            productionFileName = testFile.getFileName().substring(0, testFile.getFileName().toLowerCase().lastIndexOf("test")) + ".java";
+        }
 
         Path startDir = Paths.get(testFile.getProjectRootFolder());
         Files.walkFileTree(startDir, new FindJavaTestFilesVisitor());
