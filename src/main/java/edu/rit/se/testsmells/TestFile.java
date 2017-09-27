@@ -1,5 +1,7 @@
 package edu.rit.se.testsmells;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class TestFile {
     private String filePath, productionFilePath;
     String[] data;
@@ -35,5 +37,29 @@ public class TestFile {
     public TestFile(String filePath) {
         this.filePath = filePath;
         data = filePath.split("\\\\");
+    }
+
+    public String getRelativeTestFilePath(){
+        String[] splitString = filePath.split("\\\\");
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < 5; i++) {
+            stringBuilder.append(splitString[i] + "\\");
+        }
+        return filePath.substring(stringBuilder.toString().length()).replace("\\","/");
+    }
+
+    public String getRelativeProductionFilePath(){
+        if (!StringUtils.isEmpty(productionFilePath)){
+            String[] splitString = productionFilePath.split("\\\\");
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < 5; i++) {
+                stringBuilder.append(splitString[i] + "\\");
+            }
+            return productionFilePath.substring(stringBuilder.toString().length()).replace("\\","/");
+        }
+        else{
+            return "";
+        }
+
     }
 }
