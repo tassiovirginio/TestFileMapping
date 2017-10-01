@@ -20,7 +20,7 @@ public class ResultsWriter {
      */
     private ResultsWriter() throws IOException {
         String time =  String.valueOf(Calendar.getInstance().getTimeInMillis());
-        outputFile = MessageFormat.format("{0}_{1}_{2}.{3}", "Output","TestSmellDetection",time, "csv");
+        outputFile = MessageFormat.format("{0}_{1}_{2}.{3}", "Output","TestFileMappingDetection",time, "csv");
         writer = new FileWriter(outputFile,false);
     }
 
