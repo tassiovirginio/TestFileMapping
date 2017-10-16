@@ -12,7 +12,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         MappingDetector mappingDetector;
-        BufferedReader in = new BufferedReader(new FileReader("C:\\Projects\\TestSmells\\testing\\allTests.txt"));
+        BufferedReader in = new BufferedReader(new FileReader("G:\\TestFileMapping\\TestFile_Tag.csv"));
         String str;
 
         testFiles = new ArrayList<>();
@@ -27,19 +27,21 @@ public class Main {
         List<String> columnNames = new ArrayList<>();
         List<String> columnValues = null;
         columnNames.add(0,"App");
-        columnNames.add(1,"TestFilePath");
-        columnNames.add(2,"ProductionFilePath");
-        columnNames.add(3,"RelativeTestFilePath");
-        columnNames.add(4,"RelativeProductionFilePath");
+        columnNames.add(1,"Tag");
+        columnNames.add(2,"TestFilePath");
+        columnNames.add(3,"ProductionFilePath");
+        columnNames.add(4,"RelativeTestFilePath");
+        columnNames.add(5,"RelativeProductionFilePath");
         resultsWriter.writeColumnName(columnNames);
 
         for (int i = 0; i < testFiles.size(); i++) {
             columnValues = new ArrayList<>();
             columnValues.add(0,testFiles.get(i).getAppName());
-            columnValues.add(1,testFiles.get(i).getFilePath());
-            columnValues.add(2,testFiles.get(i).getProductionFilePath());
-            columnValues.add(3,testFiles.get(i).getRelativeTestFilePath());
-            columnValues.add(4,testFiles.get(i).getRelativeProductionFilePath());
+            columnValues.add(1,testFiles.get(i).getTagName());
+            columnValues.add(2,testFiles.get(i).getFilePath());
+            columnValues.add(3,testFiles.get(i).getProductionFilePath());
+            columnValues.add(4,testFiles.get(i).getRelativeTestFilePath());
+            columnValues.add(5,testFiles.get(i).getRelativeProductionFilePath());
             resultsWriter.writeLine(columnValues);
         }
     }
