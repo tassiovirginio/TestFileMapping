@@ -24,7 +24,7 @@ public class TestFile {
 
     public String getProjectRootFolder() {
         StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 5; i++) {
             stringBuilder.append(data[i] + "\\");
         }
         return stringBuilder.toString();
@@ -32,6 +32,10 @@ public class TestFile {
 
     public String getAppName() {
         return data[3];
+    }
+
+    public String getTagName() {
+        return data[4];
     }
 
     public TestFile(String filePath) {
