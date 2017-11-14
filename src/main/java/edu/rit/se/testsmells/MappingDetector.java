@@ -1,5 +1,9 @@
 package edu.rit.se.testsmells;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.CompilationUnit;
+
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -20,10 +24,10 @@ public class MappingDetector {
         testFile = new TestFile(testFilePath);
 
         int index = testFile.getFileName().toLowerCase().lastIndexOf("test");
-        if(index == 0){
+        if (index == 0) {
             //the name of the test file starts with the name 'test'
             productionFileName = testFile.getFileName().substring(4, testFile.getFileName().length());
-        }else{
+        } else {
             //the name of the test file ends with the name 'test'
             productionFileName = testFile.getFileName().substring(0, testFile.getFileName().toLowerCase().lastIndexOf("test")) + ".java";
         }
@@ -31,9 +35,33 @@ public class MappingDetector {
         Path startDir = Paths.get(testFile.getProjectRootFolder());
         Files.walkFileTree(startDir, new FindJavaTestFilesVisitor());
 
-        testFile.setProductionFilePath(productionFilePath);
+        if(isFileSyntacticallyValid(productionFilePath))
+            testFile.setProductionFilePath("");
+        else
+            testFile.setProductionFilePath(productionFilePath);
 
         return testFile;
+    }
+
+    /**
+     *  Determines if the identified production file is syntactically correct by parsing it and generating its AST
+     * @param filePath of the production file
+     */
+    private boolean isFileSyntacticallyValid(String filePath) {
+        boolean valid = false;
+
+        if (filePath.length() != 0) {
+            try {
+                FileInputStream fTemp = new FileInputStream(filePath);
+                CompilationUnit compilationUnit = JavaParser.parse(fTemp);
+                valid = true;
+            } catch (Exception error) {
+                valid = false;
+            }
+
+        }
+
+        return valid;
     }
 
     public class FindJavaTestFilesVisitor extends SimpleFileVisitor<Path> {
