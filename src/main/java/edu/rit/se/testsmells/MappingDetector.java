@@ -36,9 +36,9 @@ public class MappingDetector {
         Files.walkFileTree(startDir, new FindJavaTestFilesVisitor());
 
         if(isFileSyntacticallyValid(productionFilePath))
-            testFile.setProductionFilePath("");
-        else
             testFile.setProductionFilePath(productionFilePath);
+        else
+            testFile.setProductionFilePath("");
 
         return testFile;
     }
