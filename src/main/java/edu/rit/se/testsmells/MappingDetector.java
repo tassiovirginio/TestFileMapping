@@ -2,6 +2,9 @@ package edu.rit.se.testsmells;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.AnnotationDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -12,10 +15,12 @@ public class MappingDetector {
 
     TestFile testFile;
     String productionFileName, productionFilePath;
+    boolean ignoreFile;
 
     public MappingDetector() {
         productionFileName = "";
         productionFilePath = "";
+        ignoreFile = false;
     }
 
 
@@ -35,7 +40,7 @@ public class MappingDetector {
         Path startDir = Paths.get(testFile.getProjectRootFolder());
         Files.walkFileTree(startDir, new FindJavaTestFilesVisitor());
 
-        if(isFileSyntacticallyValid(productionFilePath))
+        if (isFileSyntacticallyValid(productionFilePath))
             testFile.setProductionFilePath(productionFilePath);
         else
             testFile.setProductionFilePath("");
@@ -44,17 +49,22 @@ public class MappingDetector {
     }
 
     /**
-     *  Determines if the identified production file is syntactically correct by parsing it and generating its AST
+     * Determines if the identified production file is syntactically correct by parsing it and generating its AST
+     *
      * @param filePath of the production file
      */
     private boolean isFileSyntacticallyValid(String filePath) {
         boolean valid = false;
+        ignoreFile = false;
 
         if (filePath.length() != 0) {
             try {
                 FileInputStream fTemp = new FileInputStream(filePath);
                 CompilationUnit compilationUnit = JavaParser.parse(fTemp);
-                valid = true;
+                MappingDetector.ClassVisitor classVisitor;
+                classVisitor = new MappingDetector.ClassVisitor();
+                classVisitor.visit(compilationUnit, null);
+                valid = !ignoreFile;
             } catch (Exception error) {
                 valid = false;
             }
@@ -76,5 +86,24 @@ public class MappingDetector {
             return FileVisitResult.CONTINUE;
         }
     }
+
+    /**
+     * Visitor class
+     */
+    private class ClassVisitor extends VoidVisitorAdapter<Void> {
+
+        @Override
+        public void visit(ClassOrInterfaceDeclaration n, Void arg) {
+            ignoreFile = n.isInterface();
+            super.visit(n, arg);
+        }
+
+        @Override
+        public void visit(AnnotationDeclaration n, Void arg) {
+            ignoreFile = true;
+            super.visit(n, arg);
+        }
+    }
+
 }
 
