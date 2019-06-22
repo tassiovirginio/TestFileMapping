@@ -1,6 +1,7 @@
 package edu.rit.se.testsmells;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,10 +12,23 @@ public class Main {
     static List<TestFile> testFiles;
 
     public static void main(String[] args) throws IOException {
+        if (args == null) {
+            System.out.println("Please provide the file containing the paths to the collection of test files");
+            return;
+        }
+        if(!args[0].isEmpty()){
+            File inputFile = new File(args[0]);
+            if(!inputFile.exists() || inputFile.isDirectory()) {
+                System.out.println("Please provide a valid file containing the paths to the collection of test files");
+                return;
+            }
+        }
+
+
         System.out.println("Started!");
 
         MappingDetector mappingDetector;
-        BufferedReader in = new BufferedReader(new FileReader("F:\\Projects\\TestFileMapping\\detected_testFile.csv"));
+        BufferedReader in = new BufferedReader(new FileReader(args[0]));
         String str;
 
         testFiles = new ArrayList<>();
