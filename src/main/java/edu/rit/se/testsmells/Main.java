@@ -11,18 +11,22 @@ public class Main {
     static List<TestFile> testFiles;
 
     public static void main(String[] args) throws IOException {
+        System.out.println("Started!");
+
         MappingDetector mappingDetector;
-        BufferedReader in = new BufferedReader(new FileReader("G:\\TestFileMapping\\TestFile_Tag.csv"));
+        BufferedReader in = new BufferedReader(new FileReader("F:\\Projects\\TestFileMapping\\detected_testFile.csv"));
         String str;
 
         testFiles = new ArrayList<>();
 
+        System.out.println("Reading input.");
         while ((str = in.readLine()) != null) {
+            System.out.println("Detecting: "+str);
             mappingDetector = new MappingDetector();
             testFiles.add(mappingDetector.detectMapping(str));
         }
 
-
+        System.out.println("Saving results. Total lines:"+ testFiles.size());
         ResultsWriter resultsWriter = ResultsWriter.createResultsWriter();
         List<String> columnNames = new ArrayList<>();
         List<String> columnValues = null;
@@ -44,5 +48,7 @@ public class Main {
             columnValues.add(5,testFiles.get(i).getRelativeProductionFilePath());
             resultsWriter.writeLine(columnValues);
         }
+
+        System.out.println("Completed!");
     }
 }
