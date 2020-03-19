@@ -1,4 +1,4 @@
-package edu.rit.se.testsmells;
+package edu.rit.se.testfilemapping;
 
 import java.io.BufferedReader;
 import java.io.File;

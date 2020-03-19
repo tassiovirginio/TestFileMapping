@@ -1,4 +1,4 @@
-package edu.rit.se.testsmells;
+package edu.rit.se.testfilemapping;
 
 import org.apache.commons.lang3.StringUtils;
 

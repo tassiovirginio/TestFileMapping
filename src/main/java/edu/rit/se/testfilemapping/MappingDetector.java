@@ -1,4 +1,4 @@
-package edu.rit.se.testsmells;
+package edu.rit.se.testfilemapping;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
